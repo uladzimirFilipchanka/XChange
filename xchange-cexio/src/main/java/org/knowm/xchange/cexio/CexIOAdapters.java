@@ -179,14 +179,14 @@ public class CexIOAdapters {
 
   }
 
-  public static UserTrade adaptArchivedOrder(CexIOArchivedOrder cexIOArchivedOrder) {
+  public static UserTrade adaptArchivedOrder(CexIOArchivedOrder cexIOArchivedOrder, BigDecimal priceToUse) {
     try {
       Date timestamp = fromISODateString(cexIOArchivedOrder.time);
 
       OrderType orderType = cexIOArchivedOrder.type.equals("sell") ? OrderType.ASK : OrderType.BID;
       BigDecimal originalAmount = new BigDecimal(cexIOArchivedOrder.amount);
       CurrencyPair currencyPair = new CurrencyPair(cexIOArchivedOrder.symbol1, cexIOArchivedOrder.symbol2);
-      BigDecimal price = cexIOArchivedOrder.price;
+      BigDecimal price = cexIOArchivedOrder.price == null ? priceToUse : cexIOArchivedOrder.price;
       String id = cexIOArchivedOrder.id;
       String orderId = cexIOArchivedOrder.orderId;
 
@@ -199,12 +199,12 @@ public class CexIOAdapters {
     }
   }
 
-  public static Order adaptOrder(CexIOOpenOrder cexIOOrder) {
+  public static Order adaptOrder(CexIOOpenOrder cexIOOrder, BigDecimal priceToUse) {
     OrderType orderType = cexIOOrder.type.equals("sell") ? OrderType.ASK : OrderType.BID;
     BigDecimal originalAmount = new BigDecimal(cexIOOrder.amount);
     CurrencyPair currencyPair = new CurrencyPair(cexIOOrder.symbol1, cexIOOrder.symbol2);
     Date timestamp = new Date(cexIOOrder.time);
-    BigDecimal limitPrice = new BigDecimal(cexIOOrder.price);
+    BigDecimal limitPrice = cexIOOrder.price == null ? priceToUse : new BigDecimal(cexIOOrder.price);
 
     return new LimitOrder(orderType, originalAmount, currencyPair, cexIOOrder.orderId, timestamp, limitPrice);
   }
