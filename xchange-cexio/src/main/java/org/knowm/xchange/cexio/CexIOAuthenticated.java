@@ -4,6 +4,7 @@ import org.knowm.xchange.cexio.dto.ArchivedOrdersRequest;
 import org.knowm.xchange.cexio.dto.CexIORequest;
 import org.knowm.xchange.cexio.dto.CexioSingleIdRequest;
 import org.knowm.xchange.cexio.dto.CexioSingleOrderIdRequest;
+import org.knowm.xchange.cexio.dto.PlaceMarketOrderRequest;
 import org.knowm.xchange.cexio.dto.PlaceOrderRequest;
 import org.knowm.xchange.cexio.dto.account.CexIOBalanceInfo;
 import org.knowm.xchange.cexio.dto.account.GHashIOHashrate;
@@ -45,6 +46,10 @@ public interface CexIOAuthenticated extends CexIO {
   @POST
   @Path("place_order/{currencyA}/{currencyB}/")
   CexIOOrder placeOrder(@HeaderParam("signature") ParamsDigest signer, @PathParam("currencyA") String currencyA, @PathParam("currencyB") String currencyB, PlaceOrderRequest placeOrderRequest) throws IOException;
+
+  @POST
+  @Path("place_order/{currencyA}/{currencyB}/")
+  CexIOOrder placeMarketOrder(@HeaderParam("signature") ParamsDigest signer, @PathParam("currencyA") String currencyA, @PathParam("currencyB") String currencyB, PlaceMarketOrderRequest placeOrderRequest) throws IOException;
 
   // GHash.IO calls
   @POST

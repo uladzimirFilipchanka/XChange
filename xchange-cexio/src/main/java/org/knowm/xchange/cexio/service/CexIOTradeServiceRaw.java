@@ -5,6 +5,7 @@ import org.knowm.xchange.cexio.dto.ArchivedOrdersRequest;
 import org.knowm.xchange.cexio.dto.CexIORequest;
 import org.knowm.xchange.cexio.dto.CexioSingleIdRequest;
 import org.knowm.xchange.cexio.dto.CexioSingleOrderIdRequest;
+import org.knowm.xchange.cexio.dto.PlaceMarketOrderRequest;
 import org.knowm.xchange.cexio.dto.PlaceOrderRequest;
 import org.knowm.xchange.cexio.dto.trade.CexIOArchivedOrder;
 import org.knowm.xchange.cexio.dto.trade.CexIOOpenOrder;
@@ -12,6 +13,7 @@ import org.knowm.xchange.cexio.dto.trade.CexIOOpenOrders;
 import org.knowm.xchange.cexio.dto.trade.CexIOOrder;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrencyPair;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamLimit;
@@ -78,6 +80,22 @@ public class CexIOTradeServiceRaw extends CexIOBaseService {
             (limitOrder.getType() == BID ? CexIOOrder.Type.buy : CexIOOrder.Type.sell),
             limitOrder.getLimitPrice(),
             limitOrder.getOriginalAmount()
+        ));
+    if (order.getErrorMessage() != null) {
+      throw new ExchangeException(order.getErrorMessage());
+    }
+    return order;
+  }
+
+  public CexIOOrder placeCexIOMarketOrder(MarketOrder marketOrder) throws IOException {
+
+    CexIOOrder order = cexIOAuthenticated.placeMarketOrder(
+        signatureCreator,
+        marketOrder.getCurrencyPair().base.getCurrencyCode(),
+        marketOrder.getCurrencyPair().counter.getCurrencyCode(),
+        new PlaceMarketOrderRequest(
+            (marketOrder.getType() == BID ? CexIOOrder.Type.buy : CexIOOrder.Type.sell),
+            marketOrder.getOriginalAmount()
         ));
     if (order.getErrorMessage() != null) {
       throw new ExchangeException(order.getErrorMessage());
