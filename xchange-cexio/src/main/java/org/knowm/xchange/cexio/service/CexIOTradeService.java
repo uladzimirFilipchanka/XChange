@@ -148,7 +148,9 @@ public class CexIOTradeService extends CexIOTradeServiceRaw implements TradeServ
     private BigDecimal findOutPriceByTransaction(String orderId) throws IOException {
         Map<String, List<Map<String, Object>>> data = (Map<String, List<Map<String, Object>>>) this
             .getOrderTransactions(orderId).get("data");
-
+        if (data == null || data.isEmpty() || data.get("vtx") == null){
+            return null;
+        }
         return new BigDecimal((Double) data.get("vtx")
             .stream()
             .flatMap(map -> map.entrySet().stream())

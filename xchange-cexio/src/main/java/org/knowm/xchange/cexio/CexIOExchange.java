@@ -7,11 +7,13 @@ import org.knowm.xchange.cexio.service.CexIOAccountService;
 import org.knowm.xchange.cexio.service.CexIOMarketDataService;
 import org.knowm.xchange.cexio.service.CexIOTradeService;
 import org.knowm.xchange.utils.nonce.AtomicLongIncrementalTime2014NonceFactory;
+import org.knowm.xchange.utils.nonce.CurrentNanosecondTimeIncrementalNonceFactory;
+import org.knowm.xchange.utils.nonce.TimestampIncrementingNonceFactory;
 import si.mazi.rescu.SynchronizedValueFactory;
 
 public class CexIOExchange extends BaseExchange implements Exchange {
 
-  private SynchronizedValueFactory<Long> nonceFactory = new AtomicLongIncrementalTime2014NonceFactory();
+  private SynchronizedValueFactory<Long> nonceFactory = new CurrentNanosecondTimeIncrementalNonceFactory();
 
   @Override
   protected void initServices() {
@@ -31,6 +33,10 @@ public class CexIOExchange extends BaseExchange implements Exchange {
     exchangeSpecification.setExchangeDescription("Cex.IO is a virtual commodities exchange registered in United Kingdom.");
 
     return exchangeSpecification;
+  }
+
+  public void setNonceFactory(SynchronizedValueFactory<Long> nonceFactory) {
+    this.nonceFactory = nonceFactory;
   }
 
   @Override
