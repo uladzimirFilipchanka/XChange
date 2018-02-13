@@ -151,13 +151,14 @@ public class CexIOTradeService extends CexIOTradeServiceRaw implements TradeServ
         if (data == null || data.isEmpty() || data.get("vtx") == null){
             return null;
         }
-        return new BigDecimal((Double) data.get("vtx")
+        return new BigDecimal(data.get("vtx")
             .stream()
             .flatMap(map -> map.entrySet().stream())
             .filter(Objects::nonNull)
             .filter(o -> o.getValue() != null)
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, o2) -> o))
-            .get("price"));
+            .get("price")
+            .toString());
 
     }
 }

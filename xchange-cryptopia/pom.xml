@@ -6,7 +6,7 @@
     <parent>
         <artifactId>xchange-parent</artifactId>
         <groupId>org.knowm.xchange</groupId>
-        <version>4.3.2-CUSTOM</version>
+        <version>4.3.3-CUSTOM</version>
     </parent>
 
     <artifactId>xchange-cryptopia</artifactId>
